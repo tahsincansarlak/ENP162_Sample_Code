@@ -1,0 +1,89 @@
+// Tahsin Can Sarlak - Tufts ENP 162 Fall 2020 Signal Detection Experiment
+ 
+//The following lines define the pins & variables we'll be using 
+int but = 5;
+int led = 4;
+int beeper = 7;
+int state_but = 0;
+int state_led = 0;
+
+// The following variables will be used to determine the loudness of the buzzer
+int low = 0;
+int high = 135;
+
+// The following variable will be used to decide if the buzzer will be turned on
+int randNum;
+
+// The following variables will be used to keep track of 
+// the total number of trials and the right answers
+int answer = 0;
+int trial = 1;
+
+void setup() {
+  // This will start the serial where you can write sensor values
+  Serial.begin(9600);
+
+  // This initializes the pin modes
+  pinMode(but,INPUT);
+  pinMode(led,OUTPUT);
+  pinMode(beeper,OUTPUT);
+}
+
+void loop() {
+  // The code will run only 20 times since it can run only 
+  // while the trial is less than 21
+  while(trial<21){
+    // Calls the function that does the experiment
+    experiment();
+    // Increases the number of trials each time the function is called
+    trial++;
+  }
+}
+
+// This is the main function that collects data and prints out the results
+void experiment(){
+  // Turns on the light 
+  digitalWrite(led,HIGH);
+  // Decides if the beeper will be turned on or off randomly
+  randNum = random(1,3);
+
+  // Uses the random number to decide if the beeper is going to beep or not
+  if(randNum == 1){
+    analogWrite(beeper,low);
+    delay(1000);
+  }
+  else{
+    analogWrite(beeper,high);
+    delay(1000);
+  }
+  
+  // reads the digital voltage value and will store it in the variable.
+  // It will be either 0 or 1
+  state_but = digitalRead(but);
+  delay(500);
+
+  // This is the logic behind the experiment. 
+  // If the beeper is on and the button is pushed, you get a point
+  // If the beeper is on and the button is not pushed, you lose a point
+  // If the beeper is off and the button is pushed, you lose a point
+  // If the beeper is off and the button is not pushed, you get a point
+  if( randNum == 2 && state_but == 0){
+    answer++;
+  }
+  else if( randNum == 2 && state_but == 1){
+    answer--;
+  } 
+  else if (randNum == 1 && state_but == 0){
+    answer--;
+  }
+  else if (randNum == 1 && state_but == 1){
+    answer++;
+  }
+  // Turns off the LED and the beeper before the next trial
+  digitalWrite(led,LOW);
+  analogWrite(beeper,low);
+  delay(500);
+  // Prints out the sensor readings with a comma in between
+  // p5.js will use this information only since this is the only printed part
+  Serial.print(answer);Serial.print(",");Serial.println(trial); 
+}
