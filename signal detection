@@ -9,15 +9,18 @@ int state_led = 0;
 
 // The following variables will be used to determine the loudness of the buzzer
 int low = 0;
-int high = 135;
+int high = 140;
 
 // The following variable will be used to decide if the buzzer will be turned on
 int randNum;
 
 // The following variables will be used to keep track of 
-// the total number of trials and the right answers
-int answer = 0;
+// the total number of trials and the conditions
 int trial = 1;
+int hitrate = 0;
+int falsealarm = 0;
+int miss = 0;
+int correctrej = 0;
 
 void setup() {
   // This will start the serial where you can write sensor values
@@ -63,27 +66,27 @@ void experiment(){
   delay(500);
 
   // This is the logic behind the experiment. 
-  // If the beeper is on and the button is pushed, you get a point
-  // If the beeper is on and the button is not pushed, you lose a point
-  // If the beeper is off and the button is pushed, you lose a point
-  // If the beeper is off and the button is not pushed, you get a point
+  // If the beeper is on and the button is pushed, you are in the hit rate zone
+  // If the beeper is on and the button is not pushed, you are in the false alarm rate zone
+  // If the beeper is off and the button is pushed, you are in the miss zone
+  // If the beeper is off and the button is not pushed, you are in the correct reject zone
   if( randNum == 2 && state_but == 0){
-    answer++;
+    hitrate++;
   }
   else if( randNum == 2 && state_but == 1){
-    answer--;
+    falsealarm++;
   } 
   else if (randNum == 1 && state_but == 0){
-    answer--;
+    miss++;
   }
   else if (randNum == 1 && state_but == 1){
-    answer++;
+    correctrej++;
   }
   // Turns off the LED and the beeper before the next trial
   digitalWrite(led,LOW);
   analogWrite(beeper,low);
   delay(500);
   // Prints out the sensor readings with a comma in between
-  // p5.js will use this information only since this is the only printed part
-  Serial.print(answer);Serial.print(",");Serial.println(trial); 
+  // p5.js will use this information to print out the number of times each condition is met
+  Serial.print(hitrate);Serial.print(",");Serial.print(falsealarm);Serial.print(",");Serial.print(miss);Serial.print(",");Serial.print(correctrej);Serial.print(",");Serial.println(trial); 
 }
