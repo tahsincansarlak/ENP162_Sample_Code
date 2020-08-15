@@ -1,15 +1,19 @@
 // Tahsin Can Sarlak - Tufts ENP 162 Fall 2020 Signal Detection Experiment
  
 //The following lines define the pins & variables we'll be using 
-int but = 5;
-int led = 4;
-int beeper = 7;
+int but_pin = 5;
+int led_pin = 4;
+int beeper_pin = 7;
 int state_but = 0;
 int state_led = 0;
 
-// The following variables will be used to determine the loudness of the buzzer
-int low = 0;
-int high = 140;
+// The following variables will be used to set a tone on the buzzer
+// This will be used when we want no sound from the buzzer
+int frequency_low = 0;
+// This will be used when we want sound from the buzzer
+int frequency_high = 474;
+// This will be used to determine how long the tone will play in milliseconds. 1000ms = 1s
+int duration = 2000;
 
 // The following variable will be used to decide if the buzzer will be turned on
 int randNum;
@@ -27,9 +31,9 @@ void setup() {
   Serial.begin(9600);
 
   // This initializes the pin modes
-  pinMode(but,INPUT);
-  pinMode(led,OUTPUT);
-  pinMode(beeper,OUTPUT);
+  pinMode(but_pin,INPUT);
+  pinMode(led_pin,OUTPUT);
+  pinMode(beeper_pin,OUTPUT);
 }
 
 void loop() {
@@ -46,23 +50,21 @@ void loop() {
 // This is the main function that collects data and prints out the results
 void experiment(){
   // Turns on the light 
-  digitalWrite(led,HIGH);
+  digitalWrite(led_pin,HIGH);
   // Decides if the beeper will be turned on or off randomly
   randNum = random(1,3);
 
   // Uses the random number to decide if the beeper is going to beep or not
   if(randNum == 1){
-    analogWrite(beeper,low);
-    delay(1000);
-  }
+    tone(beeper_pin, frequency_low, duration);
+    }
   else{
-    analogWrite(beeper,high);
-    delay(1000);
-  }
+    tone(beeper_pin, frequency_high, duration);
+    }
   
   // reads the digital voltage value and will store it in the variable.
   // It will be either 0 or 1
-  state_but = digitalRead(but);
+  state_but = digitalRead(but_pin);
   delay(500);
 
   // This is the logic behind the experiment. 
@@ -83,8 +85,8 @@ void experiment(){
     correctrej++;
   }
   // Turns off the LED and the beeper before the next trial
-  digitalWrite(led,LOW);
-  analogWrite(beeper,low);
+  digitalWrite(led_pin,LOW);
+  noTone(beeper_pin);
   delay(500);
   // Prints out the sensor readings with a comma in between
   // p5.js will use this information to print out the number of times each condition is met
