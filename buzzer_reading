@@ -1,8 +1,8 @@
 // Here we need to initialize the variables we will use in the code.
 // Make sure the pin numbers are right.
 
-// Declares buzzer is at pin 5
-int buzzer_pin = 5;
+// Declares buzzer is at pin 7
+int buzzer_pin = 7;
 
 // Declares the potentiometer is at pin A0
 int poten_pin = A0;
@@ -29,15 +29,15 @@ void loop() {
   // If it was digital, it could only be either 0 or 1, like a button, either pressed or not pressed.
   potent_val = analogRead(poten_pin);
   
-  // Maps the potentiometer value to PWM signal value. map() function takes the variable that will be mapped,
-  // its lowest and highest reading and the desired lowest and highest value.
-  // We need to limit out highest value to 255, since PWM can take 8 bits.
-  mapped_val = map(potent_val, 0, 1023, 0, 255); 
+  // Maps the potentiometer value. It converts the voltage reading to a number between 0 and 4000. 
+  // You can always change the minimum and maximum number to be whatever you want.
+  mapped_val = map(potent_val, 0, 1023, 0, 4000); 
   
   // It writes the mapped_val to the buzzer_pin.
-  analogWrite(buzzer_pin, mapped_val);
-  
+  tone(buzzer_pin, mapped_val);
+
   // To debug I have this Serial.println lines so that I can check the reading for potent_val and mapped_val
   Serial.print("Potentiometer reading is: " ); Serial.println(potent_val);
   Serial.print("Mapped value is: "); Serial.println(mapped_val);
+  delay(300);
 }
