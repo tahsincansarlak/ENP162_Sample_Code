@@ -1,4 +1,4 @@
-// Tahsin Can Sarlak - Tufts ENP 162 Fall 2020 Signal Detection Experiment
+// Tahsin Can Sarlak - Tufts ENP 162 Fall 2020 Sound Detection Experiment
  
 //The following lines define the pins & variables we'll be using 
 int but_pin = 5;
