@@ -1,22 +1,29 @@
-// Tahsin Can Sarlak - Tufts ENP 162 Fall 2020 Sound Detection Experiment
- 
-//The following lines define the pins & variables we'll be using 
-int but_pin = 5;
-int led_pin = 4;
-int beeper_pin = 7;
-int state_but = 0;
-int state_led = 0;
+// Tahsin Can Sarlak - Tufts ENP 162 Fall 2020 Signal Detection Experiment
 
-// The following variables will be used to set a tone on the buzzer
-// This will be used when we want no sound from the buzzer
-int frequency_low = 0;
-// This will be used when we want sound from the buzzer
-int frequency_high = 474;
-// This will be used to determine how long the tone will play in milliseconds. 1000ms = 1s
-int duration = 2000;
+#include "Volume.h" // Include the Volume library
+
+Volume vol; // Plug your speaker into the default pin for your board type which is D5:
+// https://github.com/connornishijima/arduino-volume1#supported-pins
+
+// Declares the pins for the buzzer, button, LED and
+// the potentiometer. Make sure it matches with 
+int beeper_pin = 7;
+int but_pin = 3;
+int led_pin = 2;
+int poten_pin = A0;
+
+// The state of the button
+int state_but =0;
 
 // The following variable will be used to decide if the buzzer will be turned on
 int randNum;
+
+// the frequency of the beeper
+int frequency = 440;
+
+// The volume levels
+byte volume_low = 0;
+byte volume_high = 125;
 
 // The following variables will be used to keep track of 
 // the total number of trials and the conditions
@@ -34,6 +41,9 @@ void setup() {
   pinMode(but_pin,INPUT);
   pinMode(led_pin,OUTPUT);
   pinMode(beeper_pin,OUTPUT);
+
+  // Starts using the Volume library
+  vol.begin();
 }
 
 void loop() {
@@ -56,16 +66,18 @@ void experiment(){
 
   // Uses the random number to decide if the beeper is going to beep or not
   if(randNum == 1){
-    tone(beeper_pin, frequency_low, duration);
+    vol.tone(frequency, volume_low);
+    vol.delay(1000);
     }
   else{
-    tone(beeper_pin, frequency_high, duration);
+    vol.tone(frequency, volume_high);
+    vol.delay(1000);
     }
   
   // reads the digital voltage value and will store it in the variable.
   // It will be either 0 or 1
   state_but = digitalRead(but_pin);
-  delay(500);
+  vol.delay(1000);
 
   // This is the logic behind the experiment. 
   // If the beeper is on and the button is pushed, you are in the hit rate zone
@@ -86,8 +98,8 @@ void experiment(){
   }
   // Turns off the LED and the beeper before the next trial
   digitalWrite(led_pin,LOW);
-  noTone(beeper_pin);
-  delay(500);
+  vol.noTone();
+  vol.delay(1000);
   // Prints out the sensor readings with a comma in between
   // p5.js will use this information to print out the number of times each condition is met
   Serial.print(hitrate);Serial.print(",");Serial.print(falsealarm);Serial.print(",");Serial.print(miss);Serial.print(",");Serial.print(correctrej);Serial.print(",");Serial.println(trial); 
