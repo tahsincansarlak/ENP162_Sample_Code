@@ -7,9 +7,9 @@ Volume vol; // Plug your speaker into the default pin for your board type which 
 
 // Declares the pins for the buzzer, button, LED and
 // the potentiometer. Make sure it matches with 
-int beeper_pin = 7;
-int but_pin = 3;
-int led_pin = 2;
+int beeper_pin = 5;
+int but_pin = 6;
+int led_pin = 4;
 int poten_pin = A0;
 
 // The state of the button
@@ -81,21 +81,22 @@ void experiment(){
 
   // This is the logic behind the experiment. 
   // If the beeper is on and the button is pushed, you are in the hit rate zone
-  // If the beeper is on and the button is not pushed, you are in the false alarm rate zone
-  // If the beeper is off and the button is pushed, you are in the miss zone
+  // If the beeper is on and the button is not pushed, you are in the miss zone
+  // If the beeper is off and the button is pushed, you are in the false alarm zone
   // If the beeper is off and the button is not pushed, you are in the correct reject zone
-  if( randNum == 2 && state_but == 0){
+  if( randNum == 2 && state_but == 1){
     hitrate++;
   }
-  else if( randNum == 2 && state_but == 1){
-    falsealarm++;
-  } 
-  else if (randNum == 1 && state_but == 0){
+  else if( randNum == 2 && state_but == 0){
     miss++;
-  }
+  } 
   else if (randNum == 1 && state_but == 1){
+    falsealarm++;
+  }
+  else if (randNum == 1 && state_but == 0){
     correctrej++;
   }
+  
   // Turns off the LED and the beeper before the next trial
   digitalWrite(led_pin,LOW);
   vol.noTone();
