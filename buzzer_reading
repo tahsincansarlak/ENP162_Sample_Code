@@ -124,11 +124,11 @@ void vol_level(int var){
 
         // Reads the button value to check if the button is pressed
         but_val = digitalRead(but_pin);
-      } while(but_val == 1);
+      } while(but_val == 0);
 
       // If the button is pressed, it saves the desired value to the array 
       // and prints out the number.
-      if(but_val == 0){
+      if(but_val == 1){
         desired_vol[i] = mapped_val;
         i++;
         Serial.print("Your desired value: ");Serial.println(mapped_val);
@@ -158,11 +158,11 @@ void vol_level(int var){
 
         // Reads the button value to check if the button is pressed
         but_val = digitalRead(but_pin);
-      } while(but_val == 1);
+      } while(but_val == 0);
 
       // If the button is pressed, it saves the desired value to the array 
       // and prints out the number.
-      if(but_val == 0){
+      if(but_val == 1){
         desired_vol[i] = mapped_val;
         i++;
         Serial.print("Your desired value: ");Serial.println(mapped_val);
