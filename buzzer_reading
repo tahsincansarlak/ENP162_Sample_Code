@@ -7,9 +7,9 @@ Volume vol; // Plug your speaker into the default pin for your board type which 
 
 // Declares the pins for the buzzer, button, LED and
 // the potentiometer. Make sure it matches with 
-int buzzer_pin = 7;
-int but_pin = 3;
-int led_pin = 2;
+int buzzer_pin = 5;
+int but_pin = 6;
+int led_pin = 4;
 int poten_pin = A0;
 
 // Index to be used for the desired_vol array
